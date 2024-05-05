@@ -75,7 +75,7 @@ public class curimorama {
                         default:
                             break;
                     }
-                    if(Encontradas.size()==1){
+                    if(Encontradas.size()==8){
                         int respuesta = JOptionPane.showOptionDialog(
                             null,
                             "Reiniciarjuego?",
