@@ -1,9 +1,13 @@
-import javax.swing.*;
-import java.awt.*;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class curimorama {
     private static int caso = 0;
@@ -15,6 +19,7 @@ public class curimorama {
 
         ArrayList<String> listaImagenes = new ArrayList<>();
         ArrayList<JButton> listaBotones = new ArrayList<>();
+        ArrayList<Carta> Encontradas = new ArrayList<>();
 
         listaImagenes.add("amigosdelclaudio.jpeg");
         listaImagenes.add("blueypana.jpeg");
@@ -29,37 +34,38 @@ public class curimorama {
         listaImagenes.addAll(listaDuplicada);
 
         Collections.shuffle(listaImagenes);
-
-        
+        Iniciarjuego(listaBotones,listaImagenes,Encontradas,ventanaw);
+        ventanaw.setSize(800, 800);
+        ventanaw.setLocationRelativeTo(null);
+        ventanaw.setVisible(true);
+    }
+    public static void Iniciarjuego(ArrayList<JButton> listaBotones,ArrayList<String> listaImagenes,ArrayList<Carta> Encontradas,JFrame ventanaw){
         for (int i = 0; i < listaImagenes.size(); i++) {
-            JButton button =  new JButton(new ImageIcon(curimorama.class.getResource("backCard.jpg")));
+            JButton button = new JButton(new ImageIcon(curimorama.class.getResource("/esocarlos.jpg")));
             Carta carta = new Carta(i, listaImagenes.get(i));
             button.addActionListener(new ActionListener() {
-                 @Override
-                 public void actionPerformed(ActionEvent e){
-                    int posicion = carta.getPosicion();
-                    String imagen = carta.getImagen();
-                    button.setIcon(new ImageIcon(curimorama.class.getResource(imagen)));
-
+                @Override
+                public void actionPerformed(ActionEvent e){
+                    button.setIcon(new ImageIcon(curimorama.class.getResource(carta.getImagen())));
                     switch (caso) {
                         case 0:
                             caso = 1;
-                            cartaSeleccionada = posicion;
+                            cartaSeleccionada = carta.getPosicion();
                             button.setEnabled(false);
                             break;
 
                         case 1:
-                            if(!listaImagenes.get(posicion).equals(listaImagenes.get(cartaSeleccionada))){
+                            if(!listaImagenes.get(carta.getPosicion()).equals(listaImagenes.get(cartaSeleccionada))){
                                 JOptionPane.showMessageDialog(null, "Las cartas NO coinciden", "Alerta", JOptionPane.WARNING_MESSAGE);
                                 listaBotones.get(cartaSeleccionada).setEnabled(true);
-                                listaBotones.get(posicion).setIcon(new ImageIcon(curimorama.class.getResource("backCard.jpg")));
-                                listaBotones.get(cartaSeleccionada).setIcon(new ImageIcon(curimorama.class.getResource("backCard.jpg")));
+                                listaBotones.get(carta.getPosicion()).setIcon(new ImageIcon(curimorama.class.getResource("/esocarlos.jpg")));
+                                listaBotones.get(cartaSeleccionada).setIcon(new ImageIcon(curimorama.class.getResource("/esocarlos.jpg")));
 
                             } else{
                                 JOptionPane.showMessageDialog(null, "Las cartas SI coinciden", "Alerta", JOptionPane.INFORMATION_MESSAGE);
-                                listaBotones.get(posicion).setEnabled(false);
+                                listaBotones.get(carta.getPosicion()).setEnabled(false);
                                 listaBotones.get(cartaSeleccionada).setEnabled(false);
-                            
+                                Encontradas.add(carta);
                             }
 
                             caso = 0;
@@ -69,14 +75,54 @@ public class curimorama {
                         default:
                             break;
                     }
-                 }
+                    if(Encontradas.size()==1){
+                        int respuesta = JOptionPane.showOptionDialog(
+                            null,
+                            "Reiniciarjuego?",
+                            "Felicidades pibe",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.INFORMATION_MESSAGE,
+                            null,
+                            new String[]{"Simon Bv","nel perrin"},
+                            "Simon Bv"
+                        );
+                        if(respuesta==JOptionPane.YES_OPTION){
+                            reiniciarJuego(listaBotones, listaImagenes, Encontradas, ventanaw);
+                        }else if(respuesta==JOptionPane.NO_OPTION){
+                            ventanaw.dispose();
+                        }
+                    }
+                }
             });
             ventanaw.add(button);
             listaBotones.add(button);
         }
-
-        ventanaw.setSize(666, 666);
-        ventanaw.setLocationRelativeTo(null);
-        ventanaw.setVisible(true);
     }
+    public static void reiniciarJuego(ArrayList<JButton> listaBotones, ArrayList<String> listaImagenes, ArrayList<Carta> Encontradas, JFrame ventana) {
+        ventana.getContentPane().removeAll();
+    
+        listaBotones.clear();
+        listaImagenes.clear();
+        Encontradas.clear();
+    
+        ArrayList<String> imagenes = new ArrayList<>();
+        imagenes.add("amigosdelclaudio.jpeg");
+        imagenes.add("blueypana.jpeg");
+        imagenes.add("freefiremax.jpeg");
+        imagenes.add("losestadestruyendo.jpeg");
+        imagenes.add("desmadre.jpg");
+        imagenes.add("papiar.jpeg");
+        imagenes.add("perrooperra.jpeg");
+        imagenes.add("samuel.jpeg");
+    
+        ArrayList<String> listaDuplicada = new ArrayList<>(imagenes);
+        imagenes.addAll(listaDuplicada);
+        Collections.shuffle(imagenes);
+    
+        Iniciarjuego(listaBotones, imagenes, Encontradas, ventana);
+    
+        ventana.revalidate();
+        ventana.repaint();
+    }
+    
 }

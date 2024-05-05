@@ -1,4 +1,3 @@
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 public class Carta {
