@@ -57,12 +57,16 @@ public class curimorama {
                         case 1:
                             if(!listaImagenes.get(carta.getPosicion()).equals(listaImagenes.get(cartaSeleccionada))){
                                 JOptionPane.showMessageDialog(null, "Las cartas NO coinciden", "Alerta", JOptionPane.WARNING_MESSAGE);
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException er) {
+                                    er.printStackTrace();
+                                }
                                 listaBotones.get(cartaSeleccionada).setEnabled(true);
                                 listaBotones.get(carta.getPosicion()).setIcon(new ImageIcon(curimorama.class.getResource("/esocarlos.jpg")));
                                 listaBotones.get(cartaSeleccionada).setIcon(new ImageIcon(curimorama.class.getResource("/esocarlos.jpg")));
-
                             } else{
-                                JOptionPane.showMessageDialog(null, "Las cartas SI coinciden", "Alerta", JOptionPane.INFORMATION_MESSAGE);
+                                //JOptionPane.showMessageDialog(null, "Las cartas SI coinciden", "Alerta", JOptionPane.INFORMATION_MESSAGE);
                                 listaBotones.get(carta.getPosicion()).setEnabled(false);
                                 listaBotones.get(cartaSeleccionada).setEnabled(false);
                                 Encontradas.add(carta);
@@ -75,7 +79,7 @@ public class curimorama {
                         default:
                             break;
                     }
-                    if(Encontradas.size()==1){
+                    if(Encontradas.size()==8){
                         int respuesta = JOptionPane.showOptionDialog(
                             null,
                             "Reiniciarjuego?",
